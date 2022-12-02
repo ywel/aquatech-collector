@@ -33,7 +33,6 @@ public class SendTelemetry {
 		sendData(telemetry);
 	}
 
-	private static SendBillingInfo billingInfo;
 
 
 	
@@ -167,8 +166,10 @@ public class SendTelemetry {
     		
     		try {
     			
+    			  
+
     			
-    			billingInfo.notifySulis(watermeterService.getTimeOfReading(), "5",String.valueOf(watermeterService.getDailyFlow()), reading.getIdentifier());
+    			  SendBillingInfo.notifySulis(watermeterService.getTimeOfReading(), "5",String.valueOf(watermeterService.getDailyFlow()), reading.getIdentifier());
     			
     		}catch (Exception e) {
 				logger.error(e.getMessage());

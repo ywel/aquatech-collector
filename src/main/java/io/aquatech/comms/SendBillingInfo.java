@@ -84,9 +84,9 @@ public class SendBillingInfo {
 	}
 	
 	
-		public void notifySulis(String eventTime,String zoneId,String reading ,String metercode) {
+		public static void notifySulis(String eventTime,String zoneId,String reading ,String metercode) {
 		
-			String url = null;
+			String url = "http://smartmeter.sulis.co.ke/process.php";
 		
 			String token=authenticate();
 		 

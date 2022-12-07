@@ -15,8 +15,7 @@ import org.apache.log4j.Logger;
 public class App {
 	public final static int SERVICE_PORT = 7058;
 	private static ThreadedUDPServer server;
-	
-	
+		
     static final Logger logger = Logger.getLogger(App.class);
 
 
@@ -55,8 +54,7 @@ public class App {
 					ackParams.put("hasMore", 0);// Fixed 0
 					ackParams.put("errcode", 0);// Fixed 0
 					ackParams.put("request", DataTypeUtil.parseHexStr2ByteArr(cleahex));
-					
-					
+										
 					ackBinary = adapter2.encode(ackParams);
 
 				} catch (Exception e) {
@@ -72,9 +70,7 @@ public class App {
             	if(jsonString.contains("swVersion")) {
             		
             		SendTelemetry.sendData(jsonString);
-            		
-            		
-            		
+            		           	            		
             	}else {
             		
             		SendAlarms.sendData(jsonString);

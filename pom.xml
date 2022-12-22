@@ -78,6 +78,14 @@
     
 </dependency>
 
+<!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka -->
+<dependency>
+    <groupId>org.apache.kafka</groupId>
+    <artifactId>kafka_2.13</artifactId>
+    <version>3.2.0</version>
+</dependency>
+
+
 
 
 <!-- https://mvnrepository.com/artifact/net.sf.json-lib/json-lib -->

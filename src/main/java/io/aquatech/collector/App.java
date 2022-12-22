@@ -10,10 +10,12 @@ import com.huizhong.codec.util.DataTypeUtil;
 import io.aquatech.comms.SendAlarms;
 import io.aquatech.comms.SendBillingInfo;
 import io.aquatech.comms.SendTelemetry;
+import io.aquatech.kafka.Producer;
+
 import org.apache.log4j.Logger;
 
 public class App {
-	public final static int SERVICE_PORT = 7058;
+	public final static int SERVICE_PORT = 7059;
 	private static ThreadedUDPServer server;
 		
     static final Logger logger = Logger.getLogger(App.class);
@@ -22,6 +24,8 @@ public class App {
 	static byte[] ackBinary;
 	
 	private static String jsonString;
+	
+	
 
 	public static void main(String[] args) {
 
@@ -63,17 +67,37 @@ public class App {
 				}
 
 				ThreadedUDPServer.CLIENTS.add(packet.getConnection());
-				server.send(new Packet(ackBinary, packet.getAddr(), packet.getPort()));
+				//server.send(new Packet(ackBinary, packet.getAddr(), packet.getPort()));
 				packet = null;								
 				//write to kafka 
-				//sendData(jsonString);				
+				//sendData(jsonString);		
+				Producer kafkaProducer=new Producer();
             	if(jsonString.contains("swVersion")) {
             		
-            		SendTelemetry.sendData(jsonString);
+            		
+            		//SendTelemetry.sendData(jsonString);
+            		
+            		try {
+                		kafkaProducer.writeToTopic("readings","readings",jsonString);
+
+						
+					} catch (Exception e) {
+
+					}
+            		
             		           	            		
             	}else {
             		
-            		SendAlarms.sendData(jsonString);
+            		try {
+            			
+                		kafkaProducer.writeToTopic("alarms","alarms",jsonString);
+
+						
+					} catch (Exception e) {
+					}
+            		
+
+            		//SendAlarms.sendData(jsonString);
             	}
 
 				

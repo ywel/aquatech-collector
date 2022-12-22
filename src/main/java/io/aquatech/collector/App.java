@@ -13,13 +13,15 @@ import io.aquatech.comms.SendTelemetry;
 import io.aquatech.kafka.Producer;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
 public class App {
-	public final static int SERVICE_PORT = 7059;
+	public final static int SERVICE_PORT = 7058;
 	private static ThreadedUDPServer server;
 		
     static final Logger logger = Logger.getLogger(App.class);
-
+    //mvn clean compile assembly:single
+    
 
 	static byte[] ackBinary;
 	
@@ -30,6 +32,8 @@ public class App {
 	public static void main(String[] args) {
 
 		server = new ThreadedUDPServer(SERVICE_PORT);
+		
+		PropertyConfigurator.configure("log4j.properties");
 
 		server.receive(new PacketHandler() {
 

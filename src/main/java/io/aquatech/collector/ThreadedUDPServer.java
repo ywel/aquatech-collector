@@ -5,11 +5,9 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
-import org.apache.log4j.Logger;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class ThreadedUDPServer implements Runnable {
@@ -19,7 +17,7 @@ public class ThreadedUDPServer implements Runnable {
 	private DatagramSocket socket;
 	private boolean running;
 	
-    private final Logger logger = Logger.getLogger(App.class);
+    private final Logger logger  = LoggerFactory.getLogger(App.class);
 
 	
 	/* Threads */
@@ -39,7 +37,8 @@ public class ThreadedUDPServer implements Runnable {
 		try {
 			this.init();
 		} catch (SocketException e) {
-			System.err.println("Unable to initialise the server..." + e.getMessage());
+			logger.error("Unable to initialise the server..." + e.getMessage());
+			
 		}
 	}
 	
@@ -116,6 +115,8 @@ public class ThreadedUDPServer implements Runnable {
 					try {
 						socket.receive(dgpacket);
 					} catch (IOException e) {
+						
+						logger.error(e.getMessage());
 						e.printStackTrace();
 					}
 					

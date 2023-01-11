@@ -2,11 +2,14 @@
 package io.aquatech.dto;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 //test
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonPropertyOrder({
     "timeOfReading",
     "signalStrength",
@@ -236,6 +239,9 @@ public class ServiceData {
     private String alarmDetail;
     @JsonProperty("alarmDetailNode")
     private String alarmDetailNode;
+   
+    private String deviceCode;
+    
 	public String getTimeOfReading() {
 		return timeOfReading;
 	}
@@ -727,6 +733,12 @@ public class ServiceData {
 				+ innerTempratureSensorFault + ", alarmName=" + alarmName + ", timestamp=" + timestamp + ", status="
 				+ status + ", imei=" + imei + ", cryptographicData=" + cryptographicData + ", alarmDetail="
 				+ alarmDetail + ", alarmDetailNode=" + alarmDetailNode + "]";
+	}
+	public String getDeviceCode() {
+		return deviceCode;
+	}
+	public void setDeviceCode(String deviceCode) {
+		this.deviceCode = deviceCode;
 	}
 	
 	

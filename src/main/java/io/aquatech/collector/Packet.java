@@ -1,6 +1,5 @@
 package io.aquatech.collector;
 
-import java.net.DatagramSocket;
 import java.net.InetAddress;
 
 public class Packet {

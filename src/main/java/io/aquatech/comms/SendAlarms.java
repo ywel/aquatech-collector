@@ -4,15 +4,12 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
-
-import org.apache.log4j.Logger;
 import org.asynchttpclient.AsyncHandler;
 import org.asynchttpclient.AsyncHttpClient;
 import org.asynchttpclient.Dsl;
 import org.asynchttpclient.HttpResponseBodyPart;
 import org.asynchttpclient.HttpResponseStatus;
-import org.asynchttpclient.AsyncHandler.State;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,12 +18,12 @@ import io.aquatech.collector.DateHelper;
 import io.aquatech.dto.alarms.Alarm;
 import io.aquatech.dto.alarms.AlarmTelemetry;
 import io.aquatech.dto.alarms.Datum;
-import io.aquatech.dto.alarms.ServiceData;
 import io.netty.handler.codec.http.HttpHeaders;
+import org.slf4j.Logger;
 
 public class SendAlarms {
 
-	static final Logger logger = Logger.getLogger(SendAlarms.class);
+    private static final Logger logger  = LoggerFactory.getLogger(SendAlarms.class);
 
 
 	public static void sendData(String jsonContent) {

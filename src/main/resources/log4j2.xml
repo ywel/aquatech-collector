@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+	<Appenders>
+		<!-- For Console-->
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%sn %d{yyyy/MM/dd HH:mm:ss,SSS} %r [%-6p] [%t] %c{3} [%C{3}.%M(%F:%L)] - %m%n" />
+		</Console>
+
+		<!-- For writing logs to a file-->
+		<File name="LogFile" fileName="app.log">
+			<PatternLayout pattern="%sn %d{yyyy/MM/dd HH:mm:ss,SSS} %r [%-6p] [%t] %c{3} [%C{3}.%M(%F:%L)] - %m%n" />
+		</File>
+
+
+	</Appenders>
+
+	<!-- Types of Loggers -->
+	<Loggers>
+		<Root level="info">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="LogFile" />
+		</Root>
+		<Logger name="kafka.root.logger" level="ERROR" additivity="false">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="LogFile" />
+		</Logger>
+	</Loggers>
+</Configuration>

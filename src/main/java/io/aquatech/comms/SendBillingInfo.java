@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import org.apache.log4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,9 +21,11 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import org.slf4j.Logger;
+
 public class SendBillingInfo {
 
-	static final Logger logger = Logger.getLogger(SendBillingInfo.class);
+	static final Logger logger = LoggerFactory.getLogger(SendBillingInfo.class);
 	
 	static final	ObjectMapper mapper=new ObjectMapper();
 	

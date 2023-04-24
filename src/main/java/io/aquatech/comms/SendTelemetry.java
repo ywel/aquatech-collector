@@ -134,7 +134,7 @@ public class SendTelemetry {
 					    		
 					    		
    		
-    		client.preparePost("https://chuidemo.azurewebsites.net/api/Telemetry/SaveMeterReading").
+    		client.preparePost("https://aquatech-core.azurewebsites.net/api/Telemetry/SaveMeterReading").
     		setHeader("Content-Type","application/json").
             setBody(json)
     		.execute(new AsyncHandler<Integer>() {

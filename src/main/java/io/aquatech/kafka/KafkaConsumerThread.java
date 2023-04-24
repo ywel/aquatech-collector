@@ -22,10 +22,7 @@ import java.time.Duration;
 public class KafkaConsumerThread extends Thread {
 
     private final KafkaConsumer<String, String> consumer;
-    private final String topic1;
-    private final String topic2;
-    
-	private static final Logger logger = LoggerFactory.getLogger(KafkaConsumerThread.class);
+    private static final Logger logger = LoggerFactory.getLogger(KafkaConsumerThread.class);
 
 
     public KafkaConsumerThread(String topic1, String topic2) {
@@ -37,24 +34,22 @@ public class KafkaConsumerThread extends Thread {
         props.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
         this.consumer = new KafkaConsumer<>(props);
-        this.topic1 = topic1;
-        this.topic2 = topic2;
     }
 
     @Override
     public void run() {
         // Subscribe to the topics
-        consumer.subscribe(Arrays.asList("readings"));
+        consumer.subscribe(Arrays.asList("hexdump"));
 
-        ObjectMapper mapper=new ObjectMapper();
-        HuizongReading reading =new HuizongReading();
+        new ObjectMapper();
+        new HuizongReading();
         
 
         // Poll for new messages
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
             for (ConsumerRecord<String, String> record : records) {
-            //	logger.info("Received message: (" + record.key() + ", " + record.value() + ") at offset " + record.offset() + " from partition " + record.partition());
+            logger.info("Received message: (" + record.key() + ", " + record.value() + ") at offset " + record.offset() + " from partition " + record.partition());
             
                  try {
                           

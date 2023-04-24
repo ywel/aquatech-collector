@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 public class UdpClient {
 
-	static final Logger logger = LoggerFactory.getLogger(SendBillingInfo.class);
+	static final Logger logger = LoggerFactory.getLogger(UdpClient.class);
 	private DatagramSocket socket;
 		 
 	    public  void sendData(String message) {

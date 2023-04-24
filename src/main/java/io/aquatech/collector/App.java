@@ -75,16 +75,16 @@ public class App {
 					Producer kafkaProducer = new Producer();
 
 					
-					
+					kafkaProducer.writeToTopic("hexdump", "hexdump", cleahex);
+
 
 					if (jsonString.contains("swVersion")) {
 
-						SendTelemetry.sendData(jsonString);
+						//SendTelemetry.sendData(jsonString);
 
 						try {
 							kafkaProducer.writeToTopic("readings", "readings", jsonString);
 
-							kafkaProducer.writeToTopic("hexdump", "hexdump", cleahex);
 
 						} catch (Exception e) {
 
@@ -104,12 +104,12 @@ public class App {
 							logger.error(e.getMessage());
 						}
 
-						SendAlarms.sendData(jsonString);
+						//SendAlarms.sendData(jsonString);
 					}
 					
-					UdpClient udpClient = new UdpClient();
+					//UdpClient udpClient = new UdpClient();
 
-					udpClient.sendData(cleahex);
+					//udpClient.sendData(cleahex);
 
 				}
 
@@ -117,8 +117,8 @@ public class App {
 		});
 		
 		try {
-			//KafkaConsumerThread consumerThread=new KafkaConsumerThread("hexdumpalarms", "hexdump");
-			//consumerThread.start();
+			KafkaConsumerThread consumerThread=new KafkaConsumerThread("hexdumpalarms", "hexdump");
+			consumerThread.start();
 			
 		} catch (Exception e) {
 			logger.error(e.getMessage());

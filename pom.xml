@@ -6,7 +6,7 @@
 
   <groupId>io.aquatech.collector</groupId>
   <artifactId>aquatech-collector</artifactId>
-  <version>2.0</version>
+  <version>2.1</version>
 
   <name>aquatech-collector</name>
   <!-- FIXME change it to the project's website -->

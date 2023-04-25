@@ -75,7 +75,7 @@ public class App {
 					Producer kafkaProducer = new Producer();
 
 					
-					kafkaProducer.writeToTopic("hexdump", "hexdump", cleahex);
+					kafkaProducer.writeToTopic("hz_telemetry", "hz_telemetry", cleahex);
 
 
 					if (jsonString.contains("swVersion")) {
@@ -117,7 +117,7 @@ public class App {
 		});
 		
 		try {
-			KafkaConsumerThread consumerThread=new KafkaConsumerThread("hexdumpalarms", "hexdump");
+			KafkaConsumerThread consumerThread=new KafkaConsumerThread("hexdump", "hexdump");
 			consumerThread.start();
 			
 		} catch (Exception e) {

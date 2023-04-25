@@ -51,8 +51,7 @@ public class SendTelemetry {
             AsyncHttpClient client = Dsl.asyncHttpClient();
             ObjectMapper mapper=new ObjectMapper();
             HuizongReading reading =new HuizongReading();
-
-            try {
+ try {
                      
 
             		reading=mapper.readValue(jsonContent,HuizongReading.class);
@@ -132,6 +131,7 @@ public class SendTelemetry {
 							logger.error(e.getMessage());
 						}    		
 					    		
+           
 					    		
    		
     		client.preparePost("https://aquatech-core.azurewebsites.net/api/Telemetry/SaveMeterReading").

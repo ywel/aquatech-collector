@@ -8,6 +8,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.huawei.m2m.cig.tup.modules.protocol_adapter.IProtocolAdapter;
+import com.huizhong.codec.huizhong.ProtocolAdapterImpl;
+import com.huizhong.codec.util.DataTypeUtil;
 
 import io.aquatech.comms.UdpClient;
 import io.aquatech.dto.Datum;
@@ -28,7 +32,7 @@ public class KafkaConsumerThread extends Thread {
     public KafkaConsumerThread(String topic1, String topic2) {
         Properties props = new Properties();
         props.put("bootstrap.servers", "localhost:9092");
-        props.put("group.id", "udp-consumer-group");
+        props.put("group.id", "hz_consumer");
         props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         props.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
@@ -39,11 +43,13 @@ public class KafkaConsumerThread extends Thread {
     @Override
     public void run() {
         // Subscribe to the topics
-        consumer.subscribe(Arrays.asList("hexdump"));
+        consumer.subscribe(Arrays.asList("hz_telemetry"));
 
-        new ObjectMapper();
-        new HuizongReading();
-        
+		/*
+		 * ObjectMapper mapper=new ObjectMapper(); new HuizongReading(); Producer
+		 * kafkaProducer = new Producer();
+		 */
+  		UdpClient udpClient = new UdpClient();
 
         // Poll for new messages
         while (true) {
@@ -52,18 +58,20 @@ public class KafkaConsumerThread extends Thread {
             logger.info("Received message: (" + record.key() + ", " + record.value() + ") at offset " + record.offset() + " from partition " + record.partition());
             
                  try {
-                          
-                 		//reading=mapper.readValue(record.value(),HuizongReading.class);
-                 		
-                 		  //List<Datum> services = reading.getData();
+     				
 
-                  		//ServiceData meterService = services.get(0).getServiceData();
-                  		
-                  		
+					/*IProtocolAdapter adapter = new ProtocolAdapterImpl();
+					 * ObjectNode result =
+					 * adapter.decode(DataTypeUtil.parseHexStr2ByteArr(record.value()));
+					 * 
+					 * String jsonString = result.toString(); if (jsonString.contains("swVersion"))
+					 * { kafkaProducer.writeToTopic("readings", "readings", jsonString); }else {
+					 * 
+					 * }
+					 */
                   	//	logger.info(meterService.getOriginalData());
                   		
                   		
-                  		UdpClient udpClient = new UdpClient();
 
     					udpClient.sendData( record.value());
                  	

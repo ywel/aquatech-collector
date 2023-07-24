@@ -31,7 +31,7 @@ public class SendBillingInfo {
 	
 	private static String authenticate() {
 		String token = null;
-		String url="http://upepoapi.sulis.co.ke/createtoken.php";
+		String url="https://upepoapi.sulisea.co.ke/createtoken.php";
 		Map<String, String> map = new HashMap<>();
 		map.put("name", "mmeterreading");
 		map.put("email", "mreading@gmail.com");
@@ -89,7 +89,7 @@ public class SendBillingInfo {
 	
 		public static void notifySulis(String eventTime,String zoneId,String reading ,String metercode) {
 		
-			String url = "http://smartmeter.sulis.co.ke/process.php";
+			String url = "https://upepoapi.sulisea.co.ke/process.php";
 		
 			String token=authenticate();
 		 

@@ -80,7 +80,6 @@ public class App {
 
 					if (jsonString.contains("swVersion")) {
 
-						//SendTelemetry.sendData(jsonString);
 
 						try {
 							kafkaProducer.writeToTopic("readings", "readings", jsonString);
@@ -111,13 +110,16 @@ public class App {
 
 					//udpClient.sendData(cleahex);
 
+				}else {
+					
+					//logger.error("simi hex "+hex);
 				}
 
 			}
 		});
 		
 		try {
-			KafkaConsumerThread consumerThread=new KafkaConsumerThread("hexdump", "hexdump");
+			KafkaConsumerThread consumerThread=new KafkaConsumerThread("hz_telemetry", "hz_telemetry");
 			consumerThread.start();
 			
 		} catch (Exception e) {

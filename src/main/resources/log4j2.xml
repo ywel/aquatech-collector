@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <Appenders>
+        <Console name="ConsoleAppender" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+        
+        
+        
+        <RollingFile name="RollingFileAppender" fileName="/var/log/mezit/collector/info.log"
+                     filePattern="/var/log/mezit/collector/info-%d{yyyy-MM-dd}.log">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+        
+        <SMTP name="SMTPAppender" subject="Application Error Log"
+              to="lewis.munene@mezit.io"
+              from="no-reply@mg.clickaway.co.ke"
+              smtpHost="smtp.mailgun.org"
+              smtpPort="587"
+              smtpPassword="a7af91957c2192471ed8b2989db181c7-6b161b0a-b8e09117"
+              bufferSize="10">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </SMTP>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="RollingFileAppender"/>
+            <AppenderRef ref="SMTPAppender"/>
+        </Root>
+         <Logger name="org.apache.kafka" level="OFF"/>
+        <Logger name="org.apache.kafka.clients" level="OFF"/>
+        <Logger name="org.apache.kafka.common" level="OFF"/>
+    </Loggers>
+</Configuration>

@@ -69,15 +69,17 @@ public class ThreadedUDPServer implements Runnable {
 	 */
 	public void send(final Packet packet) {
 		send = new Thread("send_thread") {
-			public void run() {
-				DatagramPacket dgpack = new DatagramPacket(
-						packet.getData(), 
-						packet.getData().length, 
-						packet.getAddr(), 
-						packet.getPort()
-				);
-	
+			public void run() {	
 				try {
+					
+				
+
+					DatagramPacket dgpack = new DatagramPacket(
+							packet.getData(), 
+							packet.getData().length, 
+							packet.getAddr(), 
+							packet.getPort()
+					);
 					socket.send(dgpack);
 				} catch (IOException e) {
 					logger.error(e.getMessage());
@@ -85,7 +87,13 @@ public class ThreadedUDPServer implements Runnable {
 			}
 		};
 		
-		send.start();
+		try {
+			send.start();
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+		
+		
 	}
 	
 	/**

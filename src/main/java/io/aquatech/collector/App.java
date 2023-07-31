@@ -25,7 +25,8 @@ public class App {
 				String hex = new String(data);
 				logger.debug("Raw Hex From Client " + hex);
 				
-						
+					
+				
 			}
 		});
 		

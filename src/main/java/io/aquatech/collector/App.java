@@ -4,7 +4,7 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.log4j.Logger;
 
 public class App {
-	public final static int SERVICE_PORT = 7060;
+	public final static int SERVICE_PORT =43275;
 	private static ThreadedUDPServer server;
 		
     static final Logger logger = Logger.getLogger(App.class);
@@ -23,10 +23,9 @@ public class App {
 			public void process(Packet packet) {
 				char[] data = Hex.encodeHex(packet.getData(), true);
 				String hex = new String(data);
-				logger.debug("Raw Hex From Client " + hex);
+				logger.info("Raw Hex From Client " + hex);
 				
 					
-				
 			}
 		});
 		

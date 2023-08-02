@@ -39,7 +39,7 @@ public class ThreadedUDPServer implements Runnable {
 		try {
 			this.init();
 		} catch (SocketException e) {
-			System.err.println("Unable to initialise the server..." + e.getMessage());
+			logger.error("Unable to initialise the server..." + e.getMessage());
 		}
 	}
 	

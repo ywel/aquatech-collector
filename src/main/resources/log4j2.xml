@@ -3,10 +3,7 @@
     <Appenders>
         <Console name="ConsoleAppender" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
-        </Console>
-        
-        
-        
+        </Console>       
         <RollingFile name="RollingFileAppender" fileName="/var/log/mezit/collector/info.log"
                      filePattern="/var/log/mezit/collector/info-%d{yyyy-MM-dd}.log">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
@@ -14,8 +11,7 @@
                 <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
             </Policies>
             <DefaultRolloverStrategy max="10"/>
-        </RollingFile>
-        
+        </RollingFile>       
         <SMTP name="SMTPAppender" subject="Application Error Log"
               to="lewis.munene@mezit.io"
               from="no-reply@mg.clickaway.co.ke"

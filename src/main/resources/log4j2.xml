@@ -2,16 +2,16 @@
 <Configuration status="INFO">
     <Appenders>
         <Console name="ConsoleAppender" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
-        </Console>
-        <RollingFile name="RollingFileAppender" fileName="/var/log/mezit/collector/simi-info.log"
-                     filePattern="/var/log/mezit/collector/info-%d{yyyy-MM-dd}.log">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>       
+        <RollingFile name="RollingFileAppender" fileName="/logs/info.log"
+                     filePattern="/logs/info-%d{yyyy-MM-dd}.log">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
             </Policies>
             <DefaultRolloverStrategy max="10"/>
-        </RollingFile>
+        </RollingFile>       
         <SMTP name="SMTPAppender" subject="Application Error Log"
               to="lewis.munene@mezit.io"
               from="no-reply@mg.clickaway.co.ke"

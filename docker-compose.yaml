@@ -1,0 +1,11 @@
+version: '3'
+services:
+  subscriber-service:
+    image: aquacollector-service:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+       - "43275:43275/udp"
+    volumes:
+      - ./logs:/logs 

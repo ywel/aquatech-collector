@@ -1,31 +1,23 @@
-package io.aquatech.test;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+package io.aquatech.simiparser;
+
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
-import java.util.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class ByteSplitter {
+import io.aquatech.test.HourlyReading;
+import io.aquatech.test.MeterReading;
 
-    public static void main(String[] args) {
-        String input = "681051270000207568991c7002012b363100002b150600002b00000000350000000087220000002104182108232000001800000c4000000c1a00000b8200000b5500000b2800000b2400000af700000af400000af400000af400000af400000af400000af400000af400000af400000af400000af400000af400000af400000af400000af400000af400000af400000af400000af400000af400000af400000af400000af400000af400000af400000af400000af400000af400000af400000af400000af400000af400000af400000af400000af400000af400000af400000af400000af400000af300000af300000af354370106750bff2700282109000c82010666070301002d89254014000108307506086620705428931306390140008307500100ffffff0f16"; // Example input string
-        
-        String result = splitBytes(input);
-        
-       
-            System.out.println(result);
-        
-    }
-    
-    public static String splitBytes(String input) {
+public class ByteSplit {
+	
+	
+	public static String splitHex(String input) {
         if (input.length() < 20) {
             throw new IllegalArgumentException("Input string is too short.");
         }
@@ -60,7 +52,7 @@ public class ByteSplitter {
         meterReading.setSettlementDaycummulativeFlow(Double.parseDouble(settlementDayCumulative)*0.001);
         meterReading.setSettlementDaycummulativeFlowCode(DflowCode);
         meterReading.setBatteryVoltage(Double.parseDouble(batteryVoltage)*0.001);
-        meterReading.setCummulativeFlow(Double.parseDouble(flow));
+        meterReading.setCummulativeFlow(Double.parseDouble(flow)*0.001);
         meterReading.setCummulativeFlowUnit(DflowCode);
         meterReading.setInstantenousFlow(Double.parseDouble(instantenousFlow)*0.001);
         meterReading.setInstantenousFlowCode(instantenousFlowCode);
@@ -78,7 +70,7 @@ public class ByteSplitter {
         
         
  
-        HashMap<String, String> result=   splitStringIntoChunks(lastFrozenPointInTimeStart,18,convertToHumanReadableDate(tableTime,"yyyy-MM-dd"));
+        HashMap<String, String> result=   splitStringIntoChunks(lastFrozenPointInTimeStart,18,DateOperations.convertToHumanReadableDate(tableTime,"yyyy-MM-dd"));
         
         ArrayList<HourlyReading> hourlyReadings =new ArrayList<HourlyReading>();
         
@@ -152,7 +144,7 @@ public class ByteSplitter {
 //        		"dataLength: "+dataLength, "dataIdentification: "+dataIdentification, "serialNumber: "+serialNumber,"cummulativeFlowUnit: "+dataCode,"cummulativeFlow: "+flow,"Settlement day cumulative volume unit: "+DflowCode,"settlementDayCumulative: "+settlementDayCumulative,"reverseFlowCode: "+reverseFlowCode,"reverseFlow: "+revrseFlow,"instantenousFlowCode: "+instantenousFlowCode,"instantenousFlow: "+instantenousFlow
 //        		,"temperature: "+temprature,"pressure: "+pressure,"tableTime: "+convertToHumanReadableDate(tableTime),"tableStatusCode: "+tableStatusCode,"lastFrozenPointInTime: "+lastFrozenPointInTime,"lastFrozenPointInTimeStart: "+lastFrozenPointInTimeStart,"Data: "+data ,"Batery Voltage: "+ mirror(batteryVoltage),tail};
     }
-    
+	
     public static String mirror(String input) {
         int length = input.length();
         StringBuilder reversedConcatenated = new StringBuilder();
@@ -167,13 +159,13 @@ public class ByteSplitter {
     
     public static HashMap<String, String> splitStringIntoChunks(String input, int startHour,String startDate) {
         HashMap<String, String> resultMap = new HashMap<>();
-        LocalDateTime initialDateTime = createDateTime(startDate, formatHour(startHour+1));
+        LocalDateTime initialDateTime = DateOperations.createDateTime(startDate, DateOperations.formatHour(startHour+1));
         
         for (int i = 0; i < input.length(); i += 8) {
         	
             String chunk = input.substring(i, i + 8);
-            initialDateTime = incrementHour(initialDateTime);
-            resultMap.put(formatDateTime(initialDateTime), chunk);
+            initialDateTime = DateOperations.incrementHour(initialDateTime);
+            resultMap.put(DateOperations.formatDateTime(initialDateTime), chunk);
             
         }
 
@@ -192,85 +184,35 @@ public class ByteSplitter {
 
         return list;
     }
-    
-    public static String formatDateTime(LocalDateTime dateTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        return dateTime.format(formatter);
-    }
-    
-    public static LocalDateTime createDateTime(String dateStr, String timeStr) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime dateTime = LocalDateTime.parse(dateStr + " " + timeStr, formatter);
-        return dateTime;
-    }
-    public static LocalDateTime incrementHour(LocalDateTime dateTime) {
-        return dateTime.minus(1, ChronoUnit.HOURS);
-    }
-    
-    public static String formatHour(int hour) {
-        return String.format("%02d:00", hour%24);
-    }
-    
-    public static int hexToDecimal(String hex) {
-        try {
-            // Remove any "0x" prefix if present
-            hex = hex.replaceAll("^0x", "");
-            
-            // Parse the hexadecimal string as an integer with base 16
-            int decimalValue = Integer.parseInt(hex, 16);
-            
-            return decimalValue;
-        } catch (NumberFormatException e) {
-            // Handle invalid input gracefully
-            throw new IllegalArgumentException("Invalid hexadecimal string: " + hex);
-        }
-    }
-    
-    public static int bcdToDecimal(String bcd) {
-        int decimal = 0;
-        int base = 1;
-        
-        for (int i = bcd.length() - 1; i >= 0; i--) {
-            char digitChar = bcd.charAt(i);
-            int digitValue = digitChar - '0'; // Convert char to integer
-            
-            decimal += digitValue * base;
-            base *= 2; // BCD uses base 2 for each digit
-        }
-        
-        return decimal;
-    }
+	
+	 public static int hexToDecimal(String hex) {
+	        try {
+	            // Remove any "0x" prefix if present
+	            hex = hex.replaceAll("^0x", "");
+	            
+	            // Parse the hexadecimal string as an integer with base 16
+	            int decimalValue = Integer.parseInt(hex, 16);
+	            
+	            return decimalValue;
+	        } catch (NumberFormatException e) {
+	            // Handle invalid input gracefully
+	            throw new IllegalArgumentException("Invalid hexadecimal string: " + hex);
+	        }
+	    }
+	    
+	    public static int bcdToDecimal(String bcd) {
+	        int decimal = 0;
+	        int base = 1;
+	        
+	        for (int i = bcd.length() - 1; i >= 0; i--) {
+	            char digitChar = bcd.charAt(i);
+	            int digitValue = digitChar - '0'; // Convert char to integer
+	            
+	            decimal += digitValue * base;
+	            base *= 2; // BCD uses base 2 for each digit
+	        }
+	        
+	        return decimal;
+	    }
 
-    public static String convertToHumanReadableDate(String input) {
-        try {
-            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-            SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            
-            Date date = inputFormat.parse(input);
-            String output = outputFormat.format(date);
-            
-            return output;
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return "Invalid input format";
-        }
-   
-    }
-    
-
-    public static String convertToHumanReadableDate(String input,String formart) {
-        try {
-            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-            SimpleDateFormat outputFormat = new SimpleDateFormat(formart);
-            
-            Date date = inputFormat.parse(input);
-            String output = outputFormat.format(date);
-            
-            return output;
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return "Invalid input format";
-        }
-   
-    }
 }

@@ -42,7 +42,15 @@ public class App {
 			        	
 			     String telemetry=ByteSplit.splitHex(cleanhex);
 			     
+			     
+			     ackBinary="fefe6810AAAAAAAAAAAAAA0404A01700997616".getBytes();
+			     
 			     logger.info("telemetry "+telemetry);
+			     
+			     ThreadedUDPServer.CLIENTS.add(packet.getConnection());
+			     
+					server.send(new Packet(ackBinary, packet.getAddr(), packet.getPort()));
+					packet = null;
 			        	
 			        	kafkaProducer.writeToTopic("simi_telemetry", "simi_telemetry", telemetry );
 			        } else {

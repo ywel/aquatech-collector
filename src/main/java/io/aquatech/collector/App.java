@@ -6,15 +6,12 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.huawei.m2m.cig.tup.modules.protocol_adapter.IProtocolAdapter;
 import com.huizhong.codec.huizhong.ProtocolAdapterImpl;
 import com.huizhong.codec.util.DataTypeUtil;
-
-import io.aquatech.comms.SendAlarms;
-import io.aquatech.comms.SendTelemetry;
-import io.aquatech.comms.UdpClient;
 import io.aquatech.kafka.KafkaConsumerThread;
 import io.aquatech.kafka.Producer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.bugsnag.*;
 
 public class App {
 	public final static int SERVICE_PORT = 7058;
@@ -31,11 +28,16 @@ public class App {
 	public static void main(String[] args) {
 
 		server = new ThreadedUDPServer(SERVICE_PORT);
+		Bugsnag bugsnag = new Bugsnag("42e7e984d4bf059b30f1b7ee4e9a3303");
+
+		
 
 		server.receive(new PacketHandler() {
+			
 
 			@Override
 			public void process(Packet packet) {
+
 				char[] data = Hex.encodeHex(packet.getData(), true);
 				String hex = new String(data);
 				logger.debug("Raw Hex From Client " + hex);
@@ -85,9 +87,9 @@ public class App {
 							kafkaProducer.writeToTopic("readings", "readings", jsonString);
 
 
-						} catch (Exception e) {
+						} catch (Exception exwrite) {
 
-							logger.error(e.getMessage());
+							logger.error(exwrite.getMessage());
 
 						}
 
@@ -98,9 +100,9 @@ public class App {
 							kafkaProducer.writeToTopic("alarms", "alarms", jsonString);
 
 
-						} catch (Exception e) {
+						} catch (Exception exwrite1) {
 
-							logger.error(e.getMessage());
+							logger.error(exwrite1.getMessage());
 						}
 
 						//SendAlarms.sendData(jsonString);
@@ -122,9 +124,9 @@ public class App {
 			KafkaConsumerThread consumerThread=new KafkaConsumerThread("hz_telemetry", "hz_telemetry");
 			consumerThread.start();
 			
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			e.printStackTrace();
+		} catch (Exception eexwrite) {
+			logger.error(eexwrite.getMessage());
+			eexwrite.printStackTrace();
 		}
 		
 		

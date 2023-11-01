@@ -14,10 +14,10 @@
         </RollingFile>       
         <SMTP name="SMTPAppender" subject="Application Error Log"
               to="lewis.munene@mezit.io"
-              from="no-reply@mg.clickaway.co.ke"
+              from="postmaster@clickaway.co.ke"
               smtpHost="smtp.mailgun.org"
               smtpPort="587"
-              smtpPassword="a7af91957c2192471ed8b2989db181c7-6b161b0a-b8e09117"
+              smtpPassword="c20df832d4fe9fd8693cef66c5b077c8-324e0bb2-cc9beed1"
               bufferSize="10">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </SMTP>
@@ -26,7 +26,7 @@
         <Root level="info">
             <AppenderRef ref="ConsoleAppender"/>
             <AppenderRef ref="RollingFileAppender"/>
-            <AppenderRef ref="SMTPAppender"/>
+           <!-- <AppenderRef ref="SMTPAppender"/>-->
         </Root>
          <Logger name="org.apache.kafka" level="OFF"/>
         <Logger name="org.apache.kafka.clients" level="OFF"/>

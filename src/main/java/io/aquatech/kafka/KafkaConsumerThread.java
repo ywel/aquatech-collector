@@ -73,7 +73,7 @@ public class KafkaConsumerThread extends Thread {
                   		
                   		
 
-    					udpClient.sendData( record.value());
+    					//udpClient.sendData( record.value());
                  	
      			} catch (Exception e) {
      				

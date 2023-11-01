@@ -10,12 +10,16 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import io.aquatech.kafka.Producer;
+import io.aquatech.simiparser.ByteSplit;
+
 public class NonBlockingUDPServer {
-    private static final int PORT = 9877;
+    private static final int PORT = 43275;
     private static final int THREAD_POOL_SIZE = 10;
 
     public static void main(String[] args) {
         ExecutorService threadPool = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
+        
 
         try {
             DatagramChannel channel = DatagramChannel.open();
@@ -95,9 +99,24 @@ public class NonBlockingUDPServer {
     }
     
     private static String processClientMessage(byte[] clientMessageBytes) {
-        // Implement your custom logic here to generate a response based on the client message.
-        // For simplicity, this example echoes the message back as bytes.
-        return bytesToHex("fefe6810AAAAAAAAAAAAAA0404A01700997616".getBytes());
+       
+    		String hex=bytesToHex(clientMessageBytes);
+    		Producer kafkaProducer = new Producer();
+    		
+			   String prefix = "fefefe";
+
+    			
+    	 if (hex.startsWith(prefix)) {
+	           
+	        	String cleanhex=hex.substring(prefix.length());
+	        	
+	     String telemetry=ByteSplit.splitHex(cleanhex);
+	     
+	        	kafkaProducer.writeToTopic("simi_telemetry", "simi_telemetry", telemetry );
+	        } else {
+	        }
+    	
+        return "FEFEFE6810AAAAAAAAAAAAAAA0404A01700997616".toLowerCase();
     }
 
     private static String bytesToHex(byte[] bytes) {

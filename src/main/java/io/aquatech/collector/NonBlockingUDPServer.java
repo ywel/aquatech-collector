@@ -2,14 +2,14 @@ package io.aquatech.collector;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.channels.DatagramChannel;
 import java.nio.channels.Selector;
 import java.nio.channels.SelectionKey;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
 import io.aquatech.kafka.Producer;
 import io.aquatech.simiparser.ByteSplit;
 
@@ -19,18 +19,16 @@ public class NonBlockingUDPServer {
 
     public static void main(String[] args) {
         ExecutorService threadPool = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
-        
 
         try {
-            DatagramChannel channel = DatagramChannel.open();
-            channel.bind(new InetSocketAddress(PORT));
-            channel.configureBlocking(false);
-            
+            ServerSocketChannel serverChannel = ServerSocketChannel.open();
+            serverChannel.bind(new InetSocketAddress(PORT));
+            serverChannel.configureBlocking(false);
 
             Selector selector = Selector.open();
-            channel.register(selector, SelectionKey.OP_READ);
+            serverChannel.register(selector, SelectionKey.OP_ACCEPT);
 
-            System.out.println("Non-blocking UDP server with thread pool is running on port " + PORT);
+            System.out.println("Non-blocking TCP server with thread pool is running on port " + PORT);
 
             while (true) {
                 int readyChannels = selector.select();
@@ -40,18 +38,20 @@ public class NonBlockingUDPServer {
 
                 Set<SelectionKey> selectedKeys = selector.selectedKeys();
                 Iterator<SelectionKey> keyIterator = selectedKeys.iterator();
-                
+
                 while (keyIterator.hasNext()) {
                     SelectionKey key = keyIterator.next();
 
-                    if (key.isReadable()) {
+                    if (key.isAcceptable()) {
+                        SocketChannel clientChannel = serverChannel.accept();
+                        clientChannel.configureBlocking(false);
+                        clientChannel.register(selector, SelectionKey.OP_READ);
+                    } else if (key.isReadable()) {
                         threadPool.execute(() -> handleClientRequest(key));
                     }
-                    
+
                     keyIterator.remove();
                 }
-                
-
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -60,43 +60,33 @@ public class NonBlockingUDPServer {
         }
     }
 
-    // Rest of the code as before...
-
     private static void handleClientRequest(SelectionKey key) {
-    	
-    	
-    	
-        DatagramChannel readChannel = (DatagramChannel) key.channel();
+        SocketChannel readChannel = (SocketChannel) key.channel();
         ByteBuffer buffer = ByteBuffer.allocate(1024);
-        InetSocketAddress clientAddress;
-        try {
-            clientAddress = (InetSocketAddress) readChannel.receive(buffer);
 
-            if (clientAddress != null) {
-            	
-            	
+        try {
+            int bytesRead = readChannel.read(buffer);
+
+            if (bytesRead != -1) {
                 buffer.flip();
                 byte[] clientMessageBytes = new byte[buffer.remaining()];
                 buffer.get(clientMessageBytes);
                 String clientMessageHex = bytesToHex(clientMessageBytes);
 
-                System.out.println("Received message from client: " +" : "+clientAddress +"--"+ clientMessageHex);
+                System.out.println("Received message from client: " + clientMessageHex);
 
                 String responseHex = processClientMessage(clientMessageBytes);
                 byte[] responseBytes = hexToBytes(responseHex);
                 ByteBuffer responseBuffer = ByteBuffer.wrap(responseBytes);
-                readChannel.send(responseBuffer, clientAddress);
-                
-               
+                readChannel.write(responseBuffer);
+
                 buffer.clear();
-        
-            } else {
-               // System.out.println("Received a null client address.");
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
     
     private static String processClientMessage(byte[] clientMessageBytes) {
        

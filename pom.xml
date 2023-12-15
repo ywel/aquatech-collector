@@ -155,7 +155,7 @@
       <configuration>
         <archive>
           <manifest>
-            <mainClass>io.aquatech.collector.App</mainClass>
+            <mainClass>io.aquatech.collector.NonBlockingUDPServer</mainClass>
           </manifest>
         </archive>
         <descriptorRefs>

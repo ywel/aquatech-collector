@@ -93,9 +93,7 @@ public class NonBlockingUDPServer {
     		String hex=bytesToHex(clientMessageBytes);
     		Producer kafkaProducer = new Producer();
     		
-			   String prefix = "fefefe";
-
-    			
+			   String prefix = "fefefe";   			
     	 if (hex.startsWith(prefix)) {
 	           
 	        	String cleanhex=hex.substring(prefix.length());
@@ -104,9 +102,8 @@ public class NonBlockingUDPServer {
 	     
 	        	kafkaProducer.writeToTopic("simi_telemetry", "simi_telemetry", telemetry );
 	        } else {
-	        }
-    	
-        return "FEFEFE6810AAAAAAAAAAAAAAA0404A01700997616".toLowerCase();
+	        }    	
+        return "6810AAAAAAAAAAAAAA0404A01700997616".toLowerCase();
     }
 
     private static String bytesToHex(byte[] bytes) {

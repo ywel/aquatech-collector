@@ -25,7 +25,7 @@ import com.huizhong.codec.util.DataTypeUtil;
 import io.aquatech.kafka.Producer;
 
 public class NonBlockingUDPServer {
-    private static final int PORT = 7058;
+    private static final int PORT = 43275;
     private static final int THREAD_POOL_SIZE = 10;
     static byte[] ackBinary;
 	Producer kafkaProducer = new Producer();
@@ -129,6 +129,7 @@ public class NonBlockingUDPServer {
         char[] clientMessageHex = Hex.encodeHex(clientMessageBytes, true);
         
         String hex = new String(clientMessageHex);
+        System.out.println(hex);
 		String cleahex = hex.substring(0, hex.lastIndexOf("16") + 2);
 		IProtocolAdapter adapter = new ProtocolAdapterImpl();
       
